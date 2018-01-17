@@ -6,4 +6,4 @@ RUN ["bash", "entrypoint.sh"]
 
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
-CMD ["start"]
+# CMD ["start"]
