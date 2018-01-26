@@ -1,0 +1,60 @@
+version: "2"
+
+services:
+  rust:
+    image: kjbreil/rust-server:latest
+    restart: unless-stopped
+    ports:
+      - "28015:28015/tcp"
+      - "28015:28015/udp"
+      - "28020:28016/tcp"
+    environment:
+      - RUST_DECAY_SCALE=0
+      - RUST_SERVER_IDENTITY=awesomeland
+      - RUST_SERVER_SEED=55378008
+      - RUST_SERVER_WORLDSIZE=3500
+      - RUST_SERVER_NAME=Awesomeland
+      - RUST_SERVER_DESCRIPTION=It's Awesome\nThere is one rule:\n***Don't be a Dick***\n\nNo Decay
+      - RUST_RCON_WEB=1
+      - RUST_RCON_PORT=28016
+      - RUST_RCON_PASSWORD=666poop
+      - RUST_SERVER_MAXPLAYERS=69
+      - RUST_SERVER_BANNER_URL="http://i.imgur.com/lUGPVD8.png"
+      - RUST_UPDATE_CHECKING=1
+      - RUST_SERVER_URL="http://awld.life"
+  rustbot_js:
+    build:
+      context: .
+      dockerfile: Dockerfile-rustbot.yml
+    restart: unless-stopped
+    depends_on:
+      - rustbot_awesomeland_db
+    volumes:
+      - ./config-awesomeland.js:/app/config.js
+      - ./rustbot-logs-awesomeland:/app/logs
+    environment:
+      - PGPASSWORD=666poop
+  rustbot_awesomeland_db:
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=rustbot
+      - POSTGRES_PASSWORD=rustbot6969botrust
+      - POSTGRES_DB=rustbot
+    volumes:
+      - rustbot_awesomeland_db:/var/lib/postgresql/data
+      - ./rustBotPG.sql:/docker-entrypoint-initdb.d/rustBotPG.sql
+  rustbot_db:
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=rustbot
+      - POSTGRES_PASSWORD=rustbot6969botrust
+      - POSTGRES_DB=rustbot
+    volumes:
+      - rustbot_awesomeland_db:/var/lib/postgresql/data
+      - ./rustBotPG.sql:/docker-entrypoint-initdb.d/rustBotPG.sql

@@ -70,8 +70,4 @@ EXPOSE 28015/tcp 28015/udp 28016/tcp 28016/udp
 
 VOLUME ["/home/server/log", "/home/server/serverfiles/server/rustserver/"]
 
-RUN ["bash", "entrypoint.sh"]
-
-ENTRYPOINT ["bash", "entrypoint.sh"]
-
 CMD ["start"]
